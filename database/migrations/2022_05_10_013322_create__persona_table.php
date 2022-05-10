@@ -14,7 +14,11 @@ class CreatePersonaTable extends Migration
     public function up()
     {
         Schema::create('persona', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Persona');
+            $table->char('Nombre',100);
+            $table->char('Ap_Paterno',100);
+            $table->char('Ap_Materno',100)->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +30,6 @@ class CreatePersonaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_persona');
+        Schema::dropIfExists('persona');
     }
 }

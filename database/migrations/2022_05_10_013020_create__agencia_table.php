@@ -14,7 +14,9 @@ class CreateAgenciaTable extends Migration
     public function up()
     {
         Schema::create('agencia', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Agencia');
+            $table->char('Nombre',100);
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateAgenciaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_agencia');
+        Schema::dropIfExists('agencia');
     }
 }

@@ -14,7 +14,10 @@ class CreateAntecedenteTable extends Migration
     public function up()
     {
         Schema::create('antecedente', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Antecendente');
+            $table->date('Fecha_Antecendente')->nullable();
+            $table->tinyInteger('Detenido'); // 1 = CON DETENIDO / 2 = SIN DETENIDO
             $table->timestamps();
         });
     }
@@ -26,6 +29,6 @@ class CreateAntecedenteTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_antecedente');
+        Schema::dropIfExists('antecedente');
     }
 }

@@ -14,7 +14,9 @@ class CreateAliasTable extends Migration
     public function up()
     {
         Schema::create('alias', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Alias');
+            $table->char('Alias',100);
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateAliasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_alias');
+        Schema::dropIfExists('alias');
     }
 }

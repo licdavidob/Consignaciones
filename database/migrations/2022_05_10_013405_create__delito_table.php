@@ -14,7 +14,9 @@ class CreateDelitoTable extends Migration
     public function up()
     {
         Schema::create('delito', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Delito');
+            $table->char('Nombre',100);
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateDelitoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_delito');
+        Schema::dropIfExists('delito');
     }
 }

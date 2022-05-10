@@ -14,7 +14,9 @@ class CreateJuzgadoTable extends Migration
     public function up()
     {
         Schema::create('juzgado', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Juzgado');
+            $table->char('Nombre',100);
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateJuzgadoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_juzgado');
+        Schema::dropIfExists('juzgado');
     }
 }

@@ -14,7 +14,9 @@ class CreateReclusorioTable extends Migration
     public function up()
     {
         Schema::create('reclusorio', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Reclusorio');
+            $table->char('Nombre',100);
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ class CreateReclusorioTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_reclusorio');
+        Schema::dropIfExists('reclusorio');
     }
 }

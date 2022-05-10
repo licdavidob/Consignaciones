@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAliasPersonaTable extends Migration
+class AddLlavesforaneasConsignacion extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateAliasPersonaTable extends Migration
      */
     public function up()
     {
-        Schema::create('alias__persona', function (Blueprint $table) {
-            $table->engine = 'InnoDB';
-            $table->id('ID_Alias_Persona');
-            $table->timestamps();
+        Schema::table('consignacion', function (Blueprint $table) {
+            $table->integer('ID_Agencia');
+            $table->foreign('ID_Agencia')->references('ID_Agencia')->on('agencia');
         });
     }
 
@@ -27,6 +26,8 @@ class CreateAliasPersonaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alias__persona');
+        Schema::table('consignacion', function (Blueprint $table) {
+            //
+        });
     }
 }

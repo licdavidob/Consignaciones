@@ -14,7 +14,8 @@ class CreateConsignacionDelitoTable extends Migration
     public function up()
     {
         Schema::create('consignacion__delito', function (Blueprint $table) {
-            $table->id();
+            $table->engine = 'InnoDB';
+            $table->id('ID_Consignacion_Delito');
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ class CreateConsignacionDelitoTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('_consignacion__delito');
+        Schema::dropIfExists('consignacion__delito');
     }
 }
