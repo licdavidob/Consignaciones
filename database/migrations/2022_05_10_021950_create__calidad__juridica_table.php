@@ -12,7 +12,7 @@ class CreateCalidadJuridicaTable extends Migration
      * @return void
      */
     public function up()
-    {
+    {   
         Schema::create('calidad_juridica', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id('ID_Calidad');
@@ -31,3 +31,4 @@ class CreateCalidadJuridicaTable extends Migration
         Schema::dropIfExists('calidad_juridica');
     }
 }
+ 

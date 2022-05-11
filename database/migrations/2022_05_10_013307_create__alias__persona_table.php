@@ -13,7 +13,7 @@ class CreateAliasPersonaTable extends Migration
      */
     public function up()
     {
-        Schema::create('alias__persona', function (Blueprint $table) {
+        Schema::create('alias_persona', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id('ID_Alias_Persona');
             $table->timestamps();
@@ -27,6 +27,6 @@ class CreateAliasPersonaTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('alias__persona');
+        Schema::dropIfExists('alias_persona');
     }
 }

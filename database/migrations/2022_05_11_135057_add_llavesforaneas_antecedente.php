@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddLlavesforaneasConsignacion extends Migration
+class AddLlavesforaneasAntecedente extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,12 @@ class AddLlavesforaneasConsignacion extends Migration
      */
     public function up()
     {
-        Schema::table('consignacion', function (Blueprint $table) {
-            $table->bigInteger('ID_Agencia')->unsigned();
-            $table->foreign('ID_Agencia')->references('ID_Agencia')->on('agencia');
-
+        Schema::table('antecedente', function (Blueprint $table) {
             $table->bigInteger('ID_Juzgado')->unsigned();
             $table->foreign('ID_Juzgado')->references('ID_Juzgado')->on('juzgado');
 
-            $table->bigInteger('ID_Reclusorio')->unsigned();
-            $table->foreign('ID_Reclusorio')->references('ID_Reclusorio')->on('reclusorio');
+            $table->bigInteger('ID_Consignacion')->unsigned();
+            $table->foreign('ID_Consignacion')->references('ID_Consignacion')->on('consignacion');
         });
     }
 
@@ -32,7 +29,7 @@ class AddLlavesforaneasConsignacion extends Migration
      */
     public function down()
     {
-        Schema::table('consignacion', function (Blueprint $table) {
+        Schema::table('antecedente', function (Blueprint $table) {
             //
         });
     }
