@@ -22,6 +22,9 @@ class AddLlavesforaneasConsignacion extends Migration
 
             $table->bigInteger('ID_Reclusorio')->unsigned();
             $table->foreign('ID_Reclusorio')->references('ID_Reclusorio')->on('reclusorio');
+
+            $table->bigInteger('ID_Averiguacion')->unsigned();
+            $table->foreign('ID_Averiguacion')->references('ID_Averiguacion')->on('averiguacion_previa');
         });
     }
 

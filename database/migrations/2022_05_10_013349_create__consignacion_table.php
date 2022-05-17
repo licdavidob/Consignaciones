@@ -23,7 +23,6 @@ class CreateConsignacionTable extends Migration
             $table->time('Hora_Regreso')->nullable();
             $table->time('Hora_Llegada')->nullable();
             $table->date('Fecha_Entrega')->nullable();
-            $table->char('Av_Previa',100);
             $table->tinyInteger('Detenido'); // 1 = CON DETENIDO / 2 = SIN DETENIDO
             $table->string('Nota', 255);
             $table->timestamps();
