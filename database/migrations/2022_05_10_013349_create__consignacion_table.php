@@ -16,6 +16,7 @@ class CreateConsignacionTable extends Migration
         Schema::create('consignacion', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id('ID_Consignacion');
+            $table->integer('Fojas');
             $table->date('Fecha');
             $table->time('Hora_Recibo')->nullable();
             $table->time('Hora_Entrega')->nullable();
@@ -23,7 +24,6 @@ class CreateConsignacionTable extends Migration
             $table->time('Hora_Regreso')->nullable();
             $table->time('Hora_Llegada')->nullable();
             $table->date('Fecha_Entrega')->nullable();
-            $table->char('Av_Previa',100);
             $table->tinyInteger('Detenido'); // 1 = CON DETENIDO / 2 = SIN DETENIDO
             $table->string('Nota', 255);
             $table->timestamps();
