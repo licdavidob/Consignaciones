@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Consignacion;
-use App\Http\Controllers\AveriguacionController;
+use App\Models\Averiguacion_Previa;
 
-
-class ConsignacionController extends Controller
+class AveriguacionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,7 +14,7 @@ class ConsignacionController extends Controller
      */
     public function index()
     {
-        return Consignacion::all();
+        //
     }
 
     /**
@@ -25,14 +23,13 @@ class ConsignacionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store($Av_Previa)
     {
-        $Averiguacion = new AveriguacionController;
-        $Averiguacion = $Averiguacion->store($request->Av_Previa);
-        // foreach ($request->Personas as $Persona) {
-        //     echo "Datos de la persona: {$Persona['Nombre']} ";
-        // }
-        return $Averiguacion['ID_Averiguacion'];
+       Averiguacion_Previa::create([
+        'Averiguacion' => $Av_Previa,
+       ]);
+       
+       return Averiguacion_Previa::latest('ID_Averiguacion')->first();
     }
 
     /**
@@ -43,7 +40,7 @@ class ConsignacionController extends Controller
      */
     public function show($id)
     {
-        return "Mostrando una consignacion por ID";
+        //
     }
 
     /**
@@ -55,7 +52,7 @@ class ConsignacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return "Actualizando una consignación por ID";
+        //
     }
 
     /**
@@ -66,6 +63,6 @@ class ConsignacionController extends Controller
      */
     public function destroy($id)
     {
-        return "Eliminando una consignación por ID";
+        //
     }
 }
