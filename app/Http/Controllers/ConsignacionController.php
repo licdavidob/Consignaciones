@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Consignacion;
 use App\Http\Controllers\AveriguacionController;
+use Carbon\Carbon;
 
 
 class ConsignacionController extends Controller
@@ -28,11 +29,29 @@ class ConsignacionController extends Controller
     public function store(Request $request)
     {
         $Averiguacion = new AveriguacionController;
+
+        //Se obtiene la informacion de la averiguacion insertada
         $Averiguacion = $Averiguacion->store($request->Av_Previa);
-        // foreach ($request->Personas as $Persona) {
-        //     echo "Datos de la persona: {$Persona['Nombre']} ";
-        // }
-        return $Averiguacion['ID_Averiguacion'];
+        Consignacion::create([
+            'Fecha' => $request->Fecha,
+            'ID_Agencia' => $request->Agencia,
+            'Fojas' => $request->Fojas, 
+            'ID_Averiguacion' => $Averiguacion['ID_Averiguacion'], 
+            'Detenido' => $request->Detenido,
+            'ID_Juzgado' => $request->Juzgado,
+            'ID_Reclusorio' => $request->Reclusorio,
+            'Hora_Recibo' => $request->Hora_Recibo,
+            'Hora_Entrega' => $request->Hora_Entrega,
+            'Hora_Salida' => $request->Hora_Salida,
+            'Hora_Regreso' => $request->Hora_Regreso,
+            'Hora_Llegada' => $request->Hora_Llegada,
+            'Fecha_Entrega' => $request->Fecha_Entrega,
+            'Nota' => $request->Nota,
+           ]);
+
+        //Se obtiene la informacion de la Consignacion insertada
+        $Consignacion = Consignacion::latest('ID_Consignacion')->first();
+        return $Consignacion;  
     }
 
     /**
