@@ -3,10 +3,16 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Consignacion;
-use App\Http\Controllers\AveriguacionController;
-use Carbon\Carbon;
 
+//Modelos
+use App\Models\Consignacion;
+
+//Controladores
+use App\Http\Controllers\AveriguacionController;
+use App\Http\Controllers\AntecedenteController;
+use App\Http\Controllers\PersonaController;
+use Illuminate\Support\Facades\DB;
+use PhpParser\Node\Stmt\Echo_;
 
 class ConsignacionController extends Controller
 {
@@ -17,7 +23,15 @@ class ConsignacionController extends Controller
      */
     public function index()
     {
-        return Consignacion::all();
+        // $Consignaciones = Consignacion::addSelect('ID_Consignacion','ID_Agencia')->get();
+        // $i = 0;
+        // foreach ($Consignaciones as $Consignacion) {
+        //     $Agencia = $Consignacion->Agencia()->select('Nombre')->get();
+        //     $Consignacion['Agencia'] = $Agencia[0]["Nombre"];
+        //     $Consignaciones[$i] = $Consignacion;
+        //     $i++;  
+        // }
+        // return $Consignaciones;
     }
 
     /**
@@ -30,8 +44,10 @@ class ConsignacionController extends Controller
     {
         $Averiguacion = new AveriguacionController;
 
-        //Se obtiene la informacion de la averiguacion insertada
+        //Se obtiene la informacion de la averiguacion previa insertada
         $Averiguacion = $Averiguacion->store($request->Av_Previa);
+
+        //Se registra la consignación
         Consignacion::create([
             'Fecha' => $request->Fecha,
             'ID_Agencia' => $request->Agencia,
@@ -51,7 +67,26 @@ class ConsignacionController extends Controller
 
         //Se obtiene la informacion de la Consignacion insertada
         $Consignacion = Consignacion::latest('ID_Consignacion')->first();
-        return $Consignacion;  
+
+        //Si existe un antecedente, se registra
+        if($request->Antecedente){
+            $Antecedente = new AntecedenteController;
+            $Antecedente->store($request->Antecedente,$Consignacion['ID_Consignacion']);
+        }
+        
+        //Si tiene delitos la consignación, se registran a la tabla pivote
+        if($request->Delitos){
+            foreach ($request->Delitos as $Delito) {
+               $Consignacion->Delito()->attach($Delito["Delito_ID"]);
+            }
+        }
+
+        //Si tiene a persona relacionadas a la consignación, se registran
+        if($request->Personas){
+            $Persona = new PersonaController;
+            $Persona->store($request->Personas,$Consignacion);
+        }
+        
     }
 
     /**
@@ -62,7 +97,7 @@ class ConsignacionController extends Controller
      */
     public function show($id)
     {
-        return "Mostrando una consignacion por ID";
+        return Consignacion::findOrFail($id);
     }
 
     /**

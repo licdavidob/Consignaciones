@@ -14,4 +14,12 @@ class Agencia extends Model
     protected $fillable = [
         'Nombre',
     ];
+
+    public function getKeyName(){
+        return "ID_Agencia";
+    }
+
+    public function Consignacion(){
+        return $this->hasMany(Consignacion::class,'ID_Consignacion','ID_Consignacion');
+    }
 }
