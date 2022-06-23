@@ -10,6 +10,10 @@ class Averiguacion_Previa extends Model
     use HasFactory;
     
     protected $table = 'averiguacion_previa';
+
+    public function getKeyName(){
+        return "ID_Averiguacion";
+    }
     
     protected $fillable = [
         'Averiguacion'

@@ -11,8 +11,7 @@ use App\Models\Consignacion;
 use App\Http\Controllers\AveriguacionController;
 use App\Http\Controllers\AntecedenteController;
 use App\Http\Controllers\PersonaController;
-use Illuminate\Support\Facades\DB;
-use PhpParser\Node\Stmt\Echo_;
+use App\Http\Controllers\DelitoController;
 
 class ConsignacionController extends Controller
 {
@@ -23,15 +22,22 @@ class ConsignacionController extends Controller
      */
     public function index()
     {
-        // $Consignaciones = Consignacion::addSelect('ID_Consignacion','ID_Agencia')->get();
-        // $i = 0;
-        // foreach ($Consignaciones as $Consignacion) {
-        //     $Agencia = $Consignacion->Agencia()->select('Nombre')->get();
-        //     $Consignacion['Agencia'] = $Agencia[0]["Nombre"];
-        //     $Consignaciones[$i] = $Consignacion;
-        //     $i++;  
-        // }
-        // return $Consignaciones;
+        $Persona = new PersonaController;
+        $Consignaciones = Consignacion::addSelect('ID_Consignacion','ID_Agencia','ID_Averiguacion','ID_Juzgado','Detenido')->get();
+        $i = 0;
+        foreach ($Consignaciones as $Consignacion) {
+            $Agencia = $Consignacion->Agencia()->select('Nombre')->get();
+            $Averiguacion = $Consignacion->Averiguacion()->select('Averiguacion')->get();
+            $Personas = $Persona->show($Consignacion['ID_Consignacion']);
+
+            $Consignacion['Con Detenido'] = $Consignacion->Detenido == 1 ? 'Si':'No';
+            $Consignacion['Agencia'] = $Agencia[0]["Nombre"];
+            $Consignacion['Averiguación'] = $Averiguacion[0]["Averiguacion"];
+            $Consignacion['Personas'] = $Personas;
+            $Consignaciones[$i] = $Consignacion;
+            $i++;  
+        }
+        return $Consignaciones;
     }
 
     /**
@@ -42,9 +48,8 @@ class ConsignacionController extends Controller
      */
     public function store(Request $request)
     {
-        $Averiguacion = new AveriguacionController;
-
         //Se obtiene la informacion de la averiguacion previa insertada
+        $Averiguacion = new AveriguacionController;
         $Averiguacion = $Averiguacion->store($request->Av_Previa);
 
         //Se registra la consignación
@@ -73,20 +78,19 @@ class ConsignacionController extends Controller
             $Antecedente = new AntecedenteController;
             $Antecedente->store($request->Antecedente,$Consignacion['ID_Consignacion']);
         }
+
+        //Si tiene a persona relacionadas a la consignación, se registran
+        if($request->Personas){
+            $Persona = new PersonaController;
+            $Persona->store($request->Personas,$Consignacion);
+        } 
         
         //Si tiene delitos la consignación, se registran a la tabla pivote
         if($request->Delitos){
             foreach ($request->Delitos as $Delito) {
                $Consignacion->Delito()->attach($Delito["Delito_ID"]);
             }
-        }
-
-        //Si tiene a persona relacionadas a la consignación, se registran
-        if($request->Personas){
-            $Persona = new PersonaController;
-            $Persona->store($request->Personas,$Consignacion);
-        }
-        
+        }        
     }
 
     /**
@@ -97,7 +101,38 @@ class ConsignacionController extends Controller
      */
     public function show($id)
     {
-        return Consignacion::findOrFail($id);
+        $AntecedenteBusqueda = new AntecedenteController;
+        $Persona = new PersonaController;
+        $Delito = new DelitoController;
+
+        $ConsignacionBusqueda = Consignacion::findOrFail($id);
+        $Antecedente = $AntecedenteBusqueda->show($ConsignacionBusqueda['ID_Consignacion']);
+        $Agencia = $ConsignacionBusqueda->Agencia()->select('Nombre')->get();
+        $Juzgado = $ConsignacionBusqueda->Juzgado()->select('Nombre')->get();
+        $Reclusorio = $ConsignacionBusqueda->Reclusorio()->select('Nombre')->get();
+        $Averiguacion = $ConsignacionBusqueda->Averiguacion()->select('Averiguacion')->get();
+        $Personas = $Persona->show($ConsignacionBusqueda['ID_Consignacion']);
+        $Delitos = $Delito->show($ConsignacionBusqueda);
+         
+        $Consignacion['Fecha'] = $ConsignacionBusqueda->Fecha;
+        $Consignacion['Agencia'] = $Agencia[0]["Nombre"];
+        $Consignacion['Fojas'] = $ConsignacionBusqueda->Fojas;
+        $Consignacion['Av_Previa'] = $Averiguacion[0]["Averiguacion"];
+        $Consignacion['Detenido'] = $ConsignacionBusqueda->Detenido == 1 ? 'Si':'No';
+        $Consignacion['Juzgado'] = $Juzgado[0]["Nombre"];
+        $Consignacion['Reclusorio'] = $Reclusorio[0]["Nombre"];
+        $Consignacion['Antecedente'] = $Antecedente;
+        $Consignacion['Personas'] = $Personas;
+        $Consignacion['Delitos'] = $Delitos;
+        $Consignacion['Hora_Recibo'] = $ConsignacionBusqueda->Hora_Recibo ?: '';
+        $Consignacion['Hora_Entrega'] = $ConsignacionBusqueda->Hora_Entrega ?: '';
+        $Consignacion['Hora_Salida'] = $ConsignacionBusqueda->Hora_Salida ?: '';
+        $Consignacion['Hora_Regreso'] = $ConsignacionBusqueda->Hora_Regreso ?: '';
+        $Consignacion['Hora_Llegada'] = $ConsignacionBusqueda->Hora_Llegada ?: '';
+        $Consignacion['Fecha_Entrega'] = $ConsignacionBusqueda->Fecha_Entrega ?: '';
+        $Consignacion['Nota'] = $ConsignacionBusqueda->Nota ?: '';
+        
+        return $Consignacion;
     }
 
     /**

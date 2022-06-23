@@ -11,6 +11,10 @@ class Delito extends Model
 
     protected $table = 'delito';
 
+    public function getKeyName(){
+        return "ID_Delito";
+    }
+
     protected $fillable = [
         'Nombre',
     ];

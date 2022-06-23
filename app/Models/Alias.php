@@ -18,4 +18,9 @@ class Alias extends Model
     protected $fillable = [
         'Alias',
     ];
+
+    //Relación muchos a muchos
+    public function Persona(){
+        return $this->belongsToMany(Delito::class,'alias_persona','ID_Alias','ID_Persona')->as('alias_persona');
+    }
 }

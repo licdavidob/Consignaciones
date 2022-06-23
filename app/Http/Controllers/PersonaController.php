@@ -61,7 +61,24 @@ class PersonaController extends Controller
      */
     public function show($id)
     {
-        //
+        $i = 0;
+        $Personas = array();
+        $BusquedaPersona = Persona::where('ID_Consignacion',$id)->get();
+        foreach ($BusquedaPersona as $Persona){
+            $r = 0;
+            $Auxiliar["Nombre"] = $Persona["Nombre"];
+            $Auxiliar["Ap_Paterno"] = $Persona["Ap_Paterno"];
+            $Auxiliar["Ap_Materno"] = $Persona["Ap_Materno"];
+            $ConjuntoAlias = $Persona->Alias;
+            foreach ($ConjuntoAlias as $Auxiliar_Alias) {
+                $Alias[$r] = $Auxiliar_Alias['Alias'];
+                $r++;
+            }
+            $Auxiliar["Alias"] = $Alias;
+            $Personas[$i] = $Auxiliar;
+            $i++;
+        }
+        return $Personas;
     }
 
     /**

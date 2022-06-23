@@ -25,6 +25,6 @@ class Persona extends Model
 
     //Relación muchos a muchos
     public function Alias(){
-        return $this->belongsToMany(Delito::class,'alias_persona','ID_Persona','ID_Alias');
+        return $this->belongsToMany(Alias::class,'alias_persona','ID_Persona','ID_Alias')->as('alias_persona');
     }
 }

@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Antecedente;
 use Illuminate\Http\Request;
 
-class AntecedenteController extends Controller
+class DelitoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,14 +22,9 @@ class AntecedenteController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store($Antecedente,$Consignacion)
+    public function store(Request $request)
     {
-        Antecedente::create([
-            'Fecha_Antecendente' => $Antecedente[0]['Fecha'],
-            'Detenido' => $Antecedente[0]['Detenido'],
-            'ID_Juzgado' => $Antecedente[0]['Juzgado'],
-            'ID_Consignacion' => $Consignacion,
-           ]);   
+        //
     }
 
     /**
@@ -39,19 +33,15 @@ class AntecedenteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($Consignación)
     {
-        $Antecedente = array();
-        $AntecedenteBusqueda = Antecedente::addSelect('Fecha_Antecendente','ID_Juzgado','Detenido')->where('ID_Consignacion',$id)->with('Juzgado')->get();
-        if(!$AntecedenteBusqueda->isEmpty()){
-            $Juzgado = $AntecedenteBusqueda[0]['Juzgado'];
-
-            $Antecedente['Fecha'] = $AntecedenteBusqueda[0]['Fecha_Antecendente'];
-            $Antecedente['Con Detenido'] = $AntecedenteBusqueda[0]['Detenido'] == 1 ? 'Si':'No';
-            $Antecedente['Juzgado'] = $Juzgado['Nombre'];
+        $DelitoBusqueda = $Consignación->Delito()->select('Nombre')->get();
+        $i = 0;
+        foreach ($DelitoBusqueda as $Delito) {
+            $Delitos[$i] = $Delito['Nombre'];
+            $i++;
         }
-
-        return $Antecedente;
+        return $Delitos;
     }
 
     /**

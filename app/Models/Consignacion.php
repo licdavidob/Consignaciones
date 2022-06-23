@@ -41,15 +41,29 @@ class Consignacion extends Model
         'ID_Averiguacion',
         'created_at',
         'updated_at',
+        'Detenido',
     ];
 
+    //Catálogos
     public function Agencia(){
         return $this->belongsTo(Agencia::class,'ID_Agencia','ID_Agencia');
-    
+    }
+
+    public function Juzgado(){
+        return $this->belongsTo(Juzgado::class,'ID_Juzgado','ID_Juzgado');
+    }
+
+    public function Reclusorio(){
+        return $this->belongsTo(Reclusorio::class,'ID_Reclusorio','ID_Reclusorio');
+    }
+
+    //Averiguación Previa
+    public function Averiguacion(){
+        return $this->belongsTo(Averiguacion_Previa::class,'ID_Averiguacion','ID_Averiguacion');
     }
     
     //Relación muchos a muchos
     public function Delito(){
-        return $this->belongsToMany(Delito::class,'consignacion_delito','ID_Consignacion','ID_Delito');
+        return $this->belongsToMany(Delito::class,'consignacion_delito','ID_Consignacion','ID_Delito')->withPivot('ID_Consignacion_Delito');
     }
 }

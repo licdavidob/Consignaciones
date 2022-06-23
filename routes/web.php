@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('FormularioPrueba');
+    return view('welcome');
 });
 
 Route::middleware([
@@ -22,9 +22,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
+        Route::get('/dashboard', function () {return view('dashboard');})->name('dashboard');
+    });
 
 Route::apiresource('Consignacion','App\Http\Controllers\ConsignacionController');
+
+
