@@ -23,7 +23,7 @@ class ConsignacionController extends Controller
     public function index()
     {
         $Persona = new PersonaController;
-        $Consignaciones = Consignacion::addSelect('ID_Consignacion','ID_Agencia','ID_Averiguacion','ID_Juzgado','Detenido')->get();
+        $Consignaciones = Consignacion::addSelect('ID_Consignacion','ID_Agencia','ID_Averiguacion','ID_Juzgado','Detenido')->where('Estatus',1)->get();
         $i = 0;
         foreach ($Consignaciones as $Consignacion) {
             $Agencia = $Consignacion->Agencia()->select('Nombre')->get();
@@ -155,6 +155,8 @@ class ConsignacionController extends Controller
      */
     public function destroy($id)
     {
-        return "Eliminando una consignación por ID";
+        $Consignacion = Consignacion::findOrFail($id);
+        $Consignacion->Estatus = 0;
+        $Consignacion->save();
     }
 }
