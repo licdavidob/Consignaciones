@@ -37,7 +37,8 @@ class ConsignacionController extends Controller
             $Consignaciones[$i] = $Consignacion;
             $i++;  
         }
-        return $Consignaciones;
+        // return $Consignaciones;
+        return view('consignaciones.index', ['consignaciones' => $Consignaciones]);
     }
 
     /**
