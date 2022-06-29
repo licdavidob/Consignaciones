@@ -1,15 +1,19 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+{{-- <x-app-layout> --}}
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
-                <x-jet-welcome />
-            </div>
+            {{-- Para llamar a un componente se usa livewire('nombre de la vista del componente', ['Parametros']) --}}
+            {{-- @livewire('show-consignaciones',['title' => 'Titulo de prueba']) --}}
         </div>
     </div>
-</x-app-layout>
+    {{-- <p> --}}
+
+{{--         
+        @foreach ($consignaciones as $consignacion)
+            {{ $consignacion }}
+            {{ $consignacion->Averiguacion }}
+            {{ $consignacion->Averiguacion['Averiguacion'] }}
+        @endforeach
+        {{ $consignaciones[0]['ID_Consignacion'] }} --}}
+    {{-- </p> --}}
+{{-- </x-app-layout> --}}
