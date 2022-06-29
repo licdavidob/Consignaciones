@@ -50,9 +50,16 @@ class AveriguacionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($Averiguación,$id)
     {
-        //
+        $AveriguacionBusqueda = Averiguacion_Previa::find($id);
+        if($AveriguacionBusqueda){
+            $AveriguacionBusqueda->Averiguacion = $Averiguación;
+            $AveriguacionBusqueda->save();
+        }else{
+            echo "Error: No se encontró averiguación asignada a la consignación";
+            exit();
+        }
     }
 
     /**
