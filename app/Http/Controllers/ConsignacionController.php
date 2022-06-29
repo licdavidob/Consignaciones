@@ -22,18 +22,15 @@ class ConsignacionController extends Controller
      */
     public function index()
     {
-        $Persona = new PersonaController;
         $Consignaciones = Consignacion::addSelect('ID_Consignacion','ID_Agencia','ID_Averiguacion','ID_Juzgado','Detenido')->where('Estatus',1)->get();
         $i = 0;
         foreach ($Consignaciones as $Consignacion) {
             $Agencia = $Consignacion->Agencia()->select('Nombre')->get();
             $Averiguacion = $Consignacion->Averiguacion()->select('Averiguacion')->get();
-            $Personas = $Persona->show($Consignacion['ID_Consignacion']);
 
-            $Consignacion['Con Detenido'] = $Consignacion->Detenido == 1 ? 'Si':'No';
+            $Consignacion['Con Detenido'] = $Consignacion->Detenido == 1 ? 'Con Detenido':'Sin Detenido';
             $Consignacion['Agencia'] = $Agencia[0]["Nombre"];
             $Consignacion['Averiguación'] = $Averiguacion[0]["Averiguacion"];
-            $Consignacion['Personas'] = $Personas;
             $Consignaciones[$i] = $Consignacion;
             $i++;  
         }
@@ -83,7 +80,7 @@ class ConsignacionController extends Controller
         //Si tiene a persona relacionadas a la consignación, se registran
         if($request->Personas){
             $Persona = new PersonaController;
-            $Persona->store($request->Personas,$Consignacion);
+            $Persona->store($request->Personas,$Consignacion->ID_Consignacion);
         } 
         
         //Si tiene delitos la consignación, se registran a la tabla pivote
@@ -145,7 +142,27 @@ class ConsignacionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        return "Actualizando una consignación por ID";
+        $ConsignacionBusqueda = Consignacion::findOrFail($id);
+                
+        //Se actualiza la informacion de la averiguacion previa
+        $Averiguacion = new AveriguacionController;
+        $Averiguacion = $Averiguacion->update($request->Av_Previa,$ConsignacionBusqueda->ID_Averiguacion);
+
+        //Se actualiza la consignación
+        $ConsignacionBusqueda->Fecha = $request->Fecha;
+        $ConsignacionBusqueda->ID_Agencia = $request->Agencia;
+        $ConsignacionBusqueda->Fojas = $request->Fojas;
+        $ConsignacionBusqueda->Detenido = $request->Detenido;
+        $ConsignacionBusqueda->ID_Juzgado = $request->Juzgado;
+        $ConsignacionBusqueda->ID_Reclusorio = $request->Reclusorio;
+        $ConsignacionBusqueda->Hora_Recibo = $request->Hora_Recibo;
+        $ConsignacionBusqueda->Hora_Entrega = $request->Hora_Entrega;
+        $ConsignacionBusqueda->Hora_Salida = $request->Hora_Salida;
+        $ConsignacionBusqueda->Hora_Regreso = $request->Hora_Regreso;
+        $ConsignacionBusqueda->Hora_Llegada = $request->Hora_Llegada;
+        $ConsignacionBusqueda->Fecha_Entrega = $request->Fecha_Entrega;
+        $ConsignacionBusqueda->Nota = $request->Nota;
+        $ConsignacionBusqueda->save();        
     }
 
     /**

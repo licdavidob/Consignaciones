@@ -36,7 +36,7 @@ class PersonaController extends Controller
                 'Ap_Paterno' => $Persona["Ap_Paterno"],
                 'Ap_Materno' => $Persona["Ap_Materno"], 
                 'ID_Calidad' => $Persona['Calidad'], 
-                'ID_Consignacion' => $Consignacion['ID_Consignacion'],
+                'ID_Consignacion' => $Consignacion,
                ]);
             
             //Se obtiene la informacion de la persona insertada
@@ -66,6 +66,7 @@ class PersonaController extends Controller
         $BusquedaPersona = Persona::where('ID_Consignacion',$id)->get();
         foreach ($BusquedaPersona as $Persona){
             $r = 0;
+            $Auxiliar["ID_Persona"] = $Persona["ID_Persona"];
             $Auxiliar["Nombre"] = $Persona["Nombre"];
             $Auxiliar["Ap_Paterno"] = $Persona["Ap_Paterno"];
             $Auxiliar["Ap_Materno"] = $Persona["Ap_Materno"];
@@ -88,9 +89,17 @@ class PersonaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($Persona,$id)
     {
-        //
+        $BusquedaPersona = Persona::find($id);
+        if($BusquedaPersona){
+            $BusquedaPersona->Nombre = $Persona;
+            $BusquedaPersona->Ap_Paterno = $Persona;
+            $BusquedaPersona->Ap_Materno = $Persona;
+            $BusquedaPersona->save();
+        }else{
+            return "No existe esa persona";
+        }
     }
 
     /**
