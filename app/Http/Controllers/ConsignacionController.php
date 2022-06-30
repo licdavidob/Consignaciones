@@ -103,33 +103,39 @@ class ConsignacionController extends Controller
         $Delito = new DelitoController;
 
         $ConsignacionBusqueda = Consignacion::findOrFail($id);
-        $Antecedente = $AntecedenteBusqueda->show($ConsignacionBusqueda['ID_Consignacion']);
-        $Agencia = $ConsignacionBusqueda->Agencia()->select('Nombre')->get();
-        $Juzgado = $ConsignacionBusqueda->Juzgado()->select('Nombre')->get();
-        $Reclusorio = $ConsignacionBusqueda->Reclusorio()->select('Nombre')->get();
-        $Averiguacion = $ConsignacionBusqueda->Averiguacion()->select('Averiguacion')->get();
-        $Personas = $Persona->show($ConsignacionBusqueda['ID_Consignacion']);
-        $Delitos = $Delito->show($ConsignacionBusqueda);
-         
-        $Consignacion['Fecha'] = $ConsignacionBusqueda->Fecha;
-        $Consignacion['Agencia'] = $Agencia[0]["Nombre"];
-        $Consignacion['Fojas'] = $ConsignacionBusqueda->Fojas;
-        $Consignacion['Av_Previa'] = $Averiguacion[0]["Averiguacion"];
-        $Consignacion['Detenido'] = $ConsignacionBusqueda->Detenido == 1 ? 'Si':'No';
-        $Consignacion['Juzgado'] = $Juzgado[0]["Nombre"];
-        $Consignacion['Reclusorio'] = $Reclusorio[0]["Nombre"];
-        $Consignacion['Antecedente'] = $Antecedente;
-        $Consignacion['Personas'] = $Personas;
-        $Consignacion['Delitos'] = $Delitos;
-        $Consignacion['Hora_Recibo'] = $ConsignacionBusqueda->Hora_Recibo ?: '';
-        $Consignacion['Hora_Entrega'] = $ConsignacionBusqueda->Hora_Entrega ?: '';
-        $Consignacion['Hora_Salida'] = $ConsignacionBusqueda->Hora_Salida ?: '';
-        $Consignacion['Hora_Regreso'] = $ConsignacionBusqueda->Hora_Regreso ?: '';
-        $Consignacion['Hora_Llegada'] = $ConsignacionBusqueda->Hora_Llegada ?: '';
-        $Consignacion['Fecha_Entrega'] = $ConsignacionBusqueda->Fecha_Entrega ?: '';
-        $Consignacion['Nota'] = $ConsignacionBusqueda->Nota ?: '';
         
-        return $Consignacion;
+        if($ConsignacionBusqueda->Estatus == 1){
+            
+            $Antecedente = $AntecedenteBusqueda->show($ConsignacionBusqueda['ID_Consignacion']);
+            $Agencia = $ConsignacionBusqueda->Agencia()->select('Nombre')->get();
+            $Juzgado = $ConsignacionBusqueda->Juzgado()->select('Nombre')->get();
+            $Reclusorio = $ConsignacionBusqueda->Reclusorio()->select('Nombre')->get();
+            $Averiguacion = $ConsignacionBusqueda->Averiguacion()->select('Averiguacion')->get();
+            $Personas = $Persona->show($ConsignacionBusqueda['ID_Consignacion']);
+            $Delitos = $Delito->show($ConsignacionBusqueda);
+             
+            $Consignacion['Fecha'] = $ConsignacionBusqueda->Fecha;
+            $Consignacion['Agencia'] = $Agencia[0]["Nombre"];
+            $Consignacion['Fojas'] = $ConsignacionBusqueda->Fojas;
+            $Consignacion['Av_Previa'] = $Averiguacion[0]["Averiguacion"];
+            $Consignacion['Detenido'] = $ConsignacionBusqueda->Detenido == 1 ? 'Si':'No';
+            $Consignacion['Juzgado'] = $Juzgado[0]["Nombre"];
+            $Consignacion['Reclusorio'] = $Reclusorio[0]["Nombre"];
+            $Consignacion['Antecedente'] = $Antecedente;
+            $Consignacion['Personas'] = $Personas;
+            $Consignacion['Delitos'] = $Delitos;
+            $Consignacion['Hora_Recibo'] = $ConsignacionBusqueda->Hora_Recibo ?: '';
+            $Consignacion['Hora_Entrega'] = $ConsignacionBusqueda->Hora_Entrega ?: '';
+            $Consignacion['Hora_Salida'] = $ConsignacionBusqueda->Hora_Salida ?: '';
+            $Consignacion['Hora_Regreso'] = $ConsignacionBusqueda->Hora_Regreso ?: '';
+            $Consignacion['Hora_Llegada'] = $ConsignacionBusqueda->Hora_Llegada ?: '';
+            $Consignacion['Fecha_Entrega'] = $ConsignacionBusqueda->Fecha_Entrega ?: '';
+            $Consignacion['Nota'] = $ConsignacionBusqueda->Nota ?: '';
+            
+            return $Consignacion;
+        }else{
+            return "Esa consignación se encuentra desactivada";
+        }
     }
 
     /**
@@ -142,7 +148,7 @@ class ConsignacionController extends Controller
     public function update(Request $request, $id)
     {
         $ConsignacionBusqueda = Consignacion::findOrFail($id);
-                
+       
         //Se actualiza la informacion de la averiguacion previa
         $Averiguacion = new AveriguacionController;
         $Averiguacion = $Averiguacion->update($request->Av_Previa,$ConsignacionBusqueda->ID_Averiguacion);
