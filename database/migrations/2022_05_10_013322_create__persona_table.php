@@ -19,6 +19,7 @@ class CreatePersonaTable extends Migration
             $table->char('Nombre',100);
             $table->char('Ap_Paterno',100);
             $table->char('Ap_Materno',100)->nullable();
+            $table->tinyInteger('Estatus')->default(1)->comment('1 = Activo / 0 = Desactivado');
             $table->timestamps();
         });
     }
